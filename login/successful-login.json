@@ -1,0 +1,116 @@
+{
+    "success": true,
+    "message": "Login successful",
+    "ui_message": "HI {User Name}, Welcome to iXPOS by myResto Today",
+    "login_context_and_data": {
+        "account": {
+            "id": "user-uuid",
+            "user_type": "admin",
+            "name": "Ahinas",
+            "email": "myrestotoday@gmail.com",
+            "mobile": "917867867860",
+            "avatar_url": null,
+            "role": "ADMIN",
+            "is_brand": true,
+            "brand_name": "Brand Name",
+            "brand_logo_url": "https://example.com/brand-logo.png",
+            "store_count_under_this_brand": 3,
+            "is_brand_verified": true,
+            "is_user_verified": true
+        },
+        "stores": [
+            {
+                "id": "store-uuid-001",
+                "serial_number": 1,
+                "track_id": "MKI0596",
+                "store_model": "restaurant",
+                "name": "Store Name 1",
+                "slug": "store-name-1",
+                "logo_url": "https://example.com/store-logo-1.png",
+                "avatar_url": "https://example.com/store-avatar-1.png",
+                "is_store_verified": true,
+                "active_status": {
+                    "method": "DATE",
+                    "date": "2028-08-12",
+                    "purchase": null,
+                    "wallet_coin_balance": 126,
+                    "commission_rate": 0.11,
+                    "exchange_currency": "INR"
+                },
+                "location": {
+                    "address_line_1": "Erattupetta",
+                    "address_line_2": "Erattupetta",
+                    "city": "Erattupetta",
+                    "state": "Kerala",
+                    "country": "India",
+                    "latitude": 9.687921,
+                    "longitude": 76.762441,
+                    "map_url": "https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"
+                }
+            },
+            {
+                "id": "store-uuid-002",
+                "serial_number": 2,
+                "track_id": "MKI0597",
+                "store_model": "cafe",
+                "name": "Store Name 2",
+                "slug": "store-name-2",
+                "logo_url": "https://example.com/store-logo-2.png",
+                "avatar_url": "https://example.com/store-avatar-2.png",
+                "is_store_verified": true,
+                "active_status": {
+                    "method": "PURCHASE",
+                    "date": null,
+                    "purchase": 120458,
+                    "wallet_coin_balance": 126,
+                    "commission_rate": 0.11,
+                    "exchange_currency": "INR"
+                },
+                "location": {
+                    "address_line_1": "Erattupetta",
+                    "address_line_2": "Erattupetta",
+                    "city": "Erattupetta",
+                    "state": "Kerala",
+                    "country": "India",
+                    "latitude": 9.687921,
+                    "longitude": 76.762441,
+                    "map_url": "https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"
+                }
+            },
+            {
+                "id": "store-uuid-003",
+                "serial_number": 3,
+                "track_id": "MKI0100",
+                "store_model": "restaurant",
+                "name": "Store Name 3",
+                "slug": "store-name-3",
+                "logo_url": "https://example.com/store-logo-3.png",
+                "avatar_url": "https://example.com/store-avatar-3.png",
+                "is_store_verified": true,
+                "active_status": {
+                    "method": "DATE",
+                    "date": "2028-08-12",
+                    "purchase": null,
+                    "wallet_coin_balance": 126,
+                    "commission_rate": 0.11,
+                    "exchange_currency": "INR"
+                },
+                "location": {
+                    "address_line_1": "Erattupetta",
+                    "address_line_2": "Erattupetta",
+                    "city": "Erattupetta",
+                    "state": "Kerala",
+                    "country": "India",
+                    "latitude": 9.687921,
+                    "longitude": 76.762441,
+                    "map_url": "https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"
+                }
+            }
+        ]
+    },
+    "redirect_url": "/dashboard",
+    "error": {
+        "code": null,
+        "message": null
+    }
+}

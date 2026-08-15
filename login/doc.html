@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login API Specification & Data Models - iXPOS by myResto Today</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #111827;
+      --bg-card-alt: #161f32;
+      --bg-code: #0d1322;
+      --border: #1f293d;
+      --border-focus: #374151;
+      
+      --accent-primary: #6366f1;
+      --accent-primary-glow: rgba(99, 102, 241, 0.25);
+      --accent-success: #10b981;
+      --accent-success-glow: rgba(16, 185, 129, 0.2);
+      --accent-danger: #f43f5e;
+      --accent-danger-glow: rgba(244, 63, 94, 0.2);
+      --accent-warning: #f59e0b;
+      --accent-info: #3b82f6;
+
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+
+      --syn-key: #818cf8;
+      --syn-string: #34d399;
+      --syn-number: #f6e05e;
+      --syn-boolean: #f472b6;
+      --syn-null: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.25rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1.1rem;
+      box-shadow: 0 0 15px var(--accent-primary-glow);
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+    }
+
+    .nav-links {
+      list-style: none;
+    }
+
+    .nav-links li a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: #fff;
+      background-color: var(--bg-card-alt);
+    }
+
+    .nav-links li a.active {
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      max-width: 1200px;
+      padding: 2.5rem 3rem;
+      overflow-y: auto;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-primary), var(--accent-success));
+    }
+
+    .api-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-method {
+      background-color: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .badge-success {
+      background-color: var(--accent-success-glow);
+      color: var(--accent-success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-danger {
+      background-color: var(--accent-danger-glow);
+      color: var(--accent-danger);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .badge-info {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .header-banner h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .header-banner p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 800px;
+    }
+
+    /* Section Component */
+    .doc-section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-title svg {
+      color: var(--accent-primary);
+    }
+
+    /* Guideline Callout Cards */
+    .callout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .callout-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .callout-card:hover {
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+    }
+
+    .callout-card.primary {
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .callout-card.danger {
+      border-left: 4px solid var(--accent-danger);
+    }
+
+    .callout-card.warning {
+      border-left: 4px solid var(--accent-warning);
+    }
+
+    .callout-card.info {
+      border-left: 4px solid var(--accent-info);
+    }
+
+    .callout-card.success {
+      border-left: 4px solid var(--accent-success);
+    }
+
+    .callout-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Tabs & Code Block Component */
+    .tabs-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .tabs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--bg-card-alt);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1rem;
+    }
+
+    .tabs-list {
+      display: flex;
+      list-style: none;
+      gap: 0.5rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.9rem 1.2rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--accent-primary);
+      background-color: rgba(99, 102, 241, 0.08);
+    }
+
+    .tab-btn.active.tab-danger {
+      border-bottom-color: var(--accent-danger);
+      background-color: rgba(244, 63, 94, 0.08);
+    }
+
+    .copy-btn {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .tab-content {
+      display: none;
+      position: relative;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    pre {
+      background-color: var(--bg-code);
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    /* JSON Syntax Highlighting */
+    .syn-key { color: var(--syn-key); font-weight: 500; }
+    .syn-string { color: var(--syn-string); }
+    .syn-number { color: var(--syn-number); }
+    .syn-boolean { color: var(--syn-boolean); font-weight: 600; }
+    .syn-null { color: var(--syn-null); font-style: italic; }
+
+    /* Tables */
+    .table-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .table-header {
+      padding: 1.25rem 1.5rem;
+      background-color: var(--bg-card-alt);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .field-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #e0e7ff;
+    }
+
+    .type-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.06);
+      color: #a7f3d0;
+    }
+
+    .nullable-tag {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .nullable-yes {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: #fcd34d;
+    }
+
+    .nullable-no {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+    }
+
+    /* Enum Comparison Grid */
+    .enum-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main-wrapper { padding: 1.5rem; }
+      .enum-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">iX</div>
+      <div class="brand-text">
+        <h1>iXPOS API Docs</h1>
+        <p>by myResto Today</p>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-section">
+        <div class="nav-section-title">Getting Started</div>
+        <ul class="nav-links">
+          <li><a href="#overview" class="active">Overview & Rules</a></li>
+          <li><a href="#key-refinements">Key Schema Refinements</a></li>
+          <li><a href="#payloads">Response Payloads</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Data Models</div>
+        <ul class="nav-links">
+          <li><a href="#model-envelope">Response Envelope</a></li>
+          <li><a href="#model-account">Account Model</a></li>
+          <li><a href="#model-store">Store Model</a></li>
+          <li><a href="#model-active-status">Active Status & Enums</a></li>
+          <li><a href="#model-location">Location Model</a></li>
+          <li><a href="#model-error">Error Model</a></li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-wrapper">
+
+    <!-- Header Banner -->
+    <header class="header-banner" id="overview">
+      <div class="api-badge-row">
+        <span class="badge badge-method">POST</span>
+        <span class="badge badge-info">/api/v1/auth/login</span>
+        <span class="badge badge-success">Content-Type: application/json</span>
+        <span class="badge badge-info">v1.0 Specification</span>
+      </div>
+      <h1>Login API Specification & Data Models</h1>
+      <p>Official technical documentation for the authentication endpoint of the iXPOS Windows Desktop Application by myResto Today. Specifies response structures, data models, subscription status enums, and error handling contracts.</p>
+    </header>
+
+    <!-- Core Rules / Instructions Section -->
+    <section class="doc-section">
+      <h2 class="section-title">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Core Development Rules & Specifications
+      </h2>
+
+      <div class="callout-grid">
+        <div class="callout-card primary">
+          <h4>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            1. Strict Envelope Uniformity
+          </h4>
+          <p>Do <strong>NOT</strong> change the response body structure between successful and failed authentication attempts. The top-level schema keys must always remain identical across all status codes.</p>
+        </div>
+
+        <div class="callout-card danger">
+          <h4>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            2. Handling Failed Logins
+          </h4>
+          <p>On authentication failure (<code>success: false</code>), set <code>login_context_and_data</code> strictly to <code>null</code>. Detailed diagnostic info must be provided in the <code>error</code> object.</p>
+        </div>
+
+        <div class="callout-card warning">
+          <h4>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            3. Deterministic Active Status Enum
+          </h4>
+          <p><code>active_status.method</code> uses a fixed enum (<code>DATE</code> or <code>PURCHASE</code>). Frontend applications inspect this field to determine subscription validity and display logic.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Schema Refinements Section -->
+    <section class="doc-section" id="key-refinements">
+      <h2 class="section-title">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2 2 2 0 01-2-2V4zM4 7a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7z"></path></svg>
+        Key Architectural Refinements
+      </h2>
+
+      <div class="callout-grid">
+        <div class="callout-card info">
+          <h4>1. Disambiguated User vs. Brand Name</h4>
+          <p>Removed duplicate <code>name</code> key inside <code>account</code>. <code>name</code> is designated specifically for User Name (e.g. "Ahinas"), while <code>brand_name</code> stores the Brand Name.</p>
+        </div>
+
+        <div class="callout-card success">
+          <h4>2. Multi-Store Support (<code>stores[]</code>)</h4>
+          <p>Replaced single <code>store</code> object with an array <code>stores[]</code> to accommodate brands managing multiple store outlets.</p>
+        </div>
+
+        <div class="callout-card primary">
+          <h4>3. Structured Store Sub-Objects</h4>
+          <p>Every store item in <code>stores[]</code> embeds 2 dedicated sub-objects: <code>active_status</code> (subscription state) and <code>location</code> (address details).</p>
+        </div>
+
+        <div class="callout-card warning">
+          <h4>4. API-Friendly English <code>snake_case</code></h4>
+          <p>Removed all non-English / Malayalam key names. Replaced with standardized <code>snake_case</code> field names (e.g., <code>wallet_coin_balance</code>).</p>
+        </div>
+
+        <div class="callout-card info">
+          <h4>5. Total Brand Stores Counter</h4>
+          <p>Added <code>store_count_under_this_brand</code> in <code>account</code> to report total registered store outlets managed under the brand entity.</p>
+        </div>
+
+        <div class="callout-card danger">
+          <h4>6. Non-Brand Account Nullability</h4>
+          <p>When <code>is_brand</code> is <code>false</code>, brand fields <code>brand_name</code> and <code>brand_logo_url</code> automatically evaluate to <code>null</code>.</p>
+        </div>
+
+        <div class="callout-card success">
+          <h4>7. Conditional Method Payload Fields</h4>
+          <p><code>date</code> and <code>purchase</code> fields are evaluated based on <code>active_status.method</code> (<code>DATE</code> populates <code>date</code>; <code>PURCHASE</code> populates <code>purchase</code>).</p>
+        </div>
+
+        <div class="callout-card primary">
+          <h4>8. Strictly-Typed Numeric Values</h4>
+          <p>Stored <code>commission_rate</code> (e.g., <code>0.11</code>) and balances as native JSON numbers instead of strings for precision arithmetic in client apps.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Response Payloads Section -->
+    <section class="doc-section" id="payloads">
+      <h2 class="section-title">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+        Complete Response Models & Payloads
+      </h2>
+
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <ul class="tabs-list">
+            <li><button class="tab-btn active" onclick="switchTab('success-tab', this)">Successful Login (200 OK)</button></li>
+            <li><button class="tab-btn tab-danger" onclick="switchTab('failed-tab', this)">Failed Login (401 / 400)</button></li>
+          </ul>
+          <button class="copy-btn" onclick="copyActiveCode()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Copy JSON
+          </button>
+        </div>
+
+        <!-- Tab 1: Successful Login -->
+        <div id="success-tab" class="tab-content active">
+          <pre><code id="code-success">{
+  <span class="syn-key">"success"</span>: <span class="syn-boolean">true</span>,
+  <span class="syn-key">"message"</span>: <span class="syn-string">"Login successful"</span>,
+  <span class="syn-key">"ui_message"</span>: <span class="syn-string">"HI {User Name}, Welcome to iXPOS by myResto Today"</span>,
+  <span class="syn-key">"login_context_and_data"</span>: {
+    <span class="syn-key">"account"</span>: {
+      <span class="syn-key">"id"</span>: <span class="syn-string">"user-uuid"</span>,
+      <span class="syn-key">"user_type"</span>: <span class="syn-string">"admin"</span>,
+      <span class="syn-key">"name"</span>: <span class="syn-string">"Ahinas"</span>,
+      <span class="syn-key">"email"</span>: <span class="syn-string">"myrestotoday@gmail.com"</span>,
+      <span class="syn-key">"mobile"</span>: <span class="syn-string">"917867867860"</span>,
+      <span class="syn-key">"avatar_url"</span>: <span class="syn-null">null</span>,
+      <span class="syn-key">"role"</span>: <span class="syn-string">"ADMIN"</span>,
+      <span class="syn-key">"is_brand"</span>: <span class="syn-boolean">true</span>,
+      <span class="syn-key">"brand_name"</span>: <span class="syn-string">"Brand Name"</span>,
+      <span class="syn-key">"brand_logo_url"</span>: <span class="syn-string">"https://example.com/brand-logo.png"</span>,
+      <span class="syn-key">"store_count_under_this_brand"</span>: <span class="syn-number">3</span>,
+      <span class="syn-key">"is_brand_verified"</span>: <span class="syn-boolean">true</span>,
+      <span class="syn-key">"is_user_verified"</span>: <span class="syn-boolean">true</span>
+    },
+    <span class="syn-key">"stores"</span>: [
+      {
+        <span class="syn-key">"id"</span>: <span class="syn-string">"store-uuid-001"</span>,
+        <span class="syn-key">"serial_number"</span>: <span class="syn-number">1</span>,
+        <span class="syn-key">"track_id"</span>: <span class="syn-string">"MKI0596"</span>,
+        <span class="syn-key">"store_model"</span>: <span class="syn-string">"restaurant"</span>,
+        <span class="syn-key">"name"</span>: <span class="syn-string">"Store Name 1"</span>,
+        <span class="syn-key">"slug"</span>: <span class="syn-string">"store-name-1"</span>,
+        <span class="syn-key">"logo_url"</span>: <span class="syn-string">"https://example.com/store-logo-1.png"</span>,
+        <span class="syn-key">"avatar_url"</span>: <span class="syn-string">"https://example.com/store-avatar-1.png"</span>,
+        <span class="syn-key">"is_store_verified"</span>: <span class="syn-boolean">true</span>,
+        <span class="syn-key">"active_status"</span>: {
+          <span class="syn-key">"method"</span>: <span class="syn-string">"DATE"</span>,
+          <span class="syn-key">"date"</span>: <span class="syn-string">"2028-08-12"</span>,
+          <span class="syn-key">"purchase"</span>: <span class="syn-null">null</span>,
+          <span class="syn-key">"wallet_coin_balance"</span>: <span class="syn-number">126</span>,
+          <span class="syn-key">"commission_rate"</span>: <span class="syn-number">0.11</span>,
+          <span class="syn-key">"exchange_currency"</span>: <span class="syn-string">"INR"</span>
+        },
+        <span class="syn-key">"location"</span>: {
+          <span class="syn-key">"address_line_1"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"address_line_2"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"city"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"state"</span>: <span class="syn-string">"Kerala"</span>,
+          <span class="syn-key">"country"</span>: <span class="syn-string">"India"</span>,
+          <span class="syn-key">"latitude"</span>: <span class="syn-number">9.687921</span>,
+          <span class="syn-key">"longitude"</span>: <span class="syn-number">76.762441</span>,
+          <span class="syn-key">"map_url"</span>: <span class="syn-string">"https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"</span>
+        }
+      },
+      {
+        <span class="syn-key">"id"</span>: <span class="syn-string">"store-uuid-002"</span>,
+        <span class="syn-key">"serial_number"</span>: <span class="syn-number">2</span>,
+        <span class="syn-key">"track_id"</span>: <span class="syn-string">"MKI0597"</span>,
+        <span class="syn-key">"store_model"</span>: <span class="syn-string">"cafe"</span>,
+        <span class="syn-key">"name"</span>: <span class="syn-string">"Store Name 2"</span>,
+        <span class="syn-key">"slug"</span>: <span class="syn-string">"store-name-2"</span>,
+        <span class="syn-key">"logo_url"</span>: <span class="syn-string">"https://example.com/store-logo-2.png"</span>,
+        <span class="syn-key">"avatar_url"</span>: <span class="syn-string">"https://example.com/store-avatar-2.png"</span>,
+        <span class="syn-key">"is_store_verified"</span>: <span class="syn-boolean">true</span>,
+        <span class="syn-key">"active_status"</span>: {
+          <span class="syn-key">"method"</span>: <span class="syn-string">"PURCHASE"</span>,
+          <span class="syn-key">"date"</span>: <span class="syn-null">null</span>,
+          <span class="syn-key">"purchase"</span>: <span class="syn-number">120458</span>,
+          <span class="syn-key">"wallet_coin_balance"</span>: <span class="syn-number">126</span>,
+          <span class="syn-key">"commission_rate"</span>: <span class="syn-number">0.11</span>,
+          <span class="syn-key">"exchange_currency"</span>: <span class="syn-string">"INR"</span>
+        },
+        <span class="syn-key">"location"</span>: {
+          <span class="syn-key">"address_line_1"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"address_line_2"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"city"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"state"</span>: <span class="syn-string">"Kerala"</span>,
+          <span class="syn-key">"country"</span>: <span class="syn-string">"India"</span>,
+          <span class="syn-key">"latitude"</span>: <span class="syn-number">9.687921</span>,
+          <span class="syn-key">"longitude"</span>: <span class="syn-number">76.762441</span>,
+          <span class="syn-key">"map_url"</span>: <span class="syn-string">"https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"</span>
+        }
+      },
+      {
+        <span class="syn-key">"id"</span>: <span class="syn-string">"store-uuid-003"</span>,
+        <span class="syn-key">"serial_number"</span>: <span class="syn-number">3</span>,
+        <span class="syn-key">"track_id"</span>: <span class="syn-string">"MKI0100"</span>,
+        <span class="syn-key">"store_model"</span>: <span class="syn-string">"restaurant"</span>,
+        <span class="syn-key">"name"</span>: <span class="syn-string">"Store Name 3"</span>,
+        <span class="syn-key">"slug"</span>: <span class="syn-string">"store-name-3"</span>,
+        <span class="syn-key">"logo_url"</span>: <span class="syn-string">"https://example.com/store-logo-3.png"</span>,
+        <span class="syn-key">"avatar_url"</span>: <span class="syn-string">"https://example.com/store-avatar-3.png"</span>,
+        <span class="syn-key">"is_store_verified"</span>: <span class="syn-boolean">true</span>,
+        <span class="syn-key">"active_status"</span>: {
+          <span class="syn-key">"method"</span>: <span class="syn-string">"DATE"</span>,
+          <span class="syn-key">"date"</span>: <span class="syn-string">"2028-08-12"</span>,
+          <span class="syn-key">"purchase"</span>: <span class="syn-null">null</span>,
+          <span class="syn-key">"wallet_coin_balance"</span>: <span class="syn-number">126</span>,
+          <span class="syn-key">"commission_rate"</span>: <span class="syn-number">0.11</span>,
+          <span class="syn-key">"exchange_currency"</span>: <span class="syn-string">"INR"</span>
+        },
+        <span class="syn-key">"location"</span>: {
+          <span class="syn-key">"address_line_1"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"address_line_2"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"city"</span>: <span class="syn-string">"Erattupetta"</span>,
+          <span class="syn-key">"state"</span>: <span class="syn-string">"Kerala"</span>,
+          <span class="syn-key">"country"</span>: <span class="syn-string">"India"</span>,
+          <span class="syn-key">"latitude"</span>: <span class="syn-number">9.687921</span>,
+          <span class="syn-key">"longitude"</span>: <span class="syn-number">76.762441</span>,
+          <span class="syn-key">"map_url"</span>: <span class="syn-string">"https://maps.app.goo.gl/J8G1qG7o2anbeD3n8"</span>
+        }
+      }
+    ]
+  },
+  <span class="syn-key">"redirect_url"</span>: <span class="syn-string">"/dashboard"</span>,
+  <span class="syn-key">"error"</span>: {
+    <span class="syn-key">"code"</span>: <span class="syn-null">null</span>,
+    <span class="syn-key">"message"</span>: <span class="syn-null">null</span>
+  }
+}</code></pre>
+        </div>
+
+        <!-- Tab 2: Failed Login -->
+        <div id="failed-tab" class="tab-content">
+          <pre><code id="code-failed">{
+  <span class="syn-key">"success"</span>: <span class="syn-boolean">false</span>,
+  <span class="syn-key">"message"</span>: <span class="syn-string">"Login failed"</span>,
+  <span class="syn-key">"ui_message"</span>: <span class="syn-string">"Invalid mobile number or password"</span>,
+  <span class="syn-key">"login_context_and_data"</span>: <span class="syn-null">null</span>,
+  <span class="syn-key">"redirect_url"</span>: <span class="syn-string">"/error-page"</span>,
+  <span class="syn-key">"error"</span>: {
+    <span class="syn-key">"code"</span>: <span class="syn-string">"INVALID_CREDENTIALS"</span>,
+    <span class="syn-key">"message"</span>: <span class="syn-string">"Invalid mobile number or password"</span>
+  }
+}</code></pre>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Field Specifications & Data Models Breakdown -->
+    <section class="doc-section" id="model-envelope">
+      <h2 class="section-title">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+        Data Models Breakdown
+      </h2>
+
+      <!-- Model 1: Envelope -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Top-Level Response Envelope</h3>
+          <span class="badge badge-info">Root JSON Object</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Data Type</th>
+              <th>Nullable</th>
+              <th>Description & Frontend Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="field-name">success</td>
+              <td><span class="type-tag">boolean</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Indicates authentication outcome. <code>true</code> if authorized; <code>false</code> on failure.</td>
+            </tr>
+            <tr>
+              <td class="field-name">message</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>System/debug summary string (e.g., "Login successful" or "Login failed").</td>
+            </tr>
+            <tr>
+              <td class="field-name">ui_message</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User-facing notification banner text formatted for display in client UI.</td>
+            </tr>
+            <tr>
+              <td class="field-name">login_context_and_data</td>
+              <td><span class="type-tag">object</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>Contains user account metadata and accessible stores array. Set strictly to <code>null</code> on login failure.</td>
+            </tr>
+            <tr>
+              <td class="field-name">redirect_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Target routing path for client navigation (e.g. <code>/dashboard</code> on success, <code>/error-page</code> on failure).</td>
+            </tr>
+            <tr>
+              <td class="field-name">error</td>
+              <td><span class="type-tag">object</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Error details object. Fields are <code>null</code> when <code>success = true</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Model 2: Account -->
+      <div class="table-container" id="model-account">
+        <div class="table-header">
+          <h3>Account Model (<code>login_context_and_data.account</code>)</h3>
+          <span class="badge badge-info">User Identity & Brand Organization</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Data Type</th>
+              <th>Nullable</th>
+              <th>Description & Frontend Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="field-name">id</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Unique user account UUID.</td>
+            </tr>
+            <tr>
+              <td class="field-name">user_type</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User classification type (e.g. <code>"admin"</code>, <code>"cashier"</code>).</td>
+            </tr>
+            <tr>
+              <td class="field-name">name</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User Display Name (e.g. <code>"Ahinas"</code>). Disambiguated from <code>brand_name</code>.</td>
+            </tr>
+            <tr>
+              <td class="field-name">email</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User email address.</td>
+            </tr>
+            <tr>
+              <td class="field-name">mobile</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User mobile phone number including country code.</td>
+            </tr>
+            <tr>
+              <td class="field-name">avatar_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>User profile picture URL (or <code>null</code> if unassigned).</td>
+            </tr>
+            <tr>
+              <td class="field-name">role</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>System access permission role (e.g. <code>"ADMIN"</code>, <code>"MANAGER"</code>).</td>
+            </tr>
+            <tr>
+              <td class="field-name">is_brand</td>
+              <td><span class="type-tag">boolean</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Flag indicating if account operates a multi-store brand organization.</td>
+            </tr>
+            <tr>
+              <td class="field-name">brand_name</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>Name of the brand entity. Evaluates to <code>null</code> if <code>is_brand == false</code>.</td>
+            </tr>
+            <tr>
+              <td class="field-name">brand_logo_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>Brand logo image URL. Evaluates to <code>null</code> if <code>is_brand == false</code>.</td>
+            </tr>
+            <tr>
+              <td class="field-name">store_count_under_this_brand</td>
+              <td><span class="type-tag">integer</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Total number of registered store outlets managed under this brand organization.</td>
+            </tr>
+            <tr>
+              <td class="field-name">is_brand_verified</td>
+              <td><span class="type-tag">boolean</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Brand verification status flag.</td>
+            </tr>
+            <tr>
+              <td class="field-name">is_user_verified</td>
+              <td><span class="type-tag">boolean</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>User identity verification status flag.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Model 3: Store -->
+      <div class="table-container" id="model-store">
+        <div class="table-header">
+          <h3>Store Model (<code>login_context_and_data.stores[]</code>)</h3>
+          <span class="badge badge-info">Store Outlet Array</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Data Type</th>
+              <th>Nullable</th>
+              <th>Description & Frontend Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="field-name">id</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Unique store UUID identifier.</td>
+            </tr>
+            <tr>
+              <td class="field-name">serial_number</td>
+              <td><span class="type-tag">integer</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Display order index for store selection lists.</td>
+            </tr>
+            <tr>
+              <td class="field-name">track_id</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Unique store tracking reference code (e.g. <code>"MKI0596"</code>).</td>
+            </tr>
+            <tr>
+              <td class="field-name">store_model</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Type of establishment (e.g. <code>"restaurant"</code>, <code>"cafe"</code>).</td>
+            </tr>
+            <tr>
+              <td class="field-name">name</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Display name of the store.</td>
+            </tr>
+            <tr>
+              <td class="field-name">slug</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>URL-safe identifier string for the store.</td>
+            </tr>
+            <tr>
+              <td class="field-name">logo_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Store primary logo image URL.</td>
+            </tr>
+            <tr>
+              <td class="field-name">avatar_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Store avatar image URL.</td>
+            </tr>
+            <tr>
+              <td class="field-name">is_store_verified</td>
+              <td><span class="type-tag">boolean</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Store verification status flag.</td>
+            </tr>
+            <tr>
+              <td class="field-name">active_status</td>
+              <td><span class="type-tag">object</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Subscription status object defining operational & subscription state.</td>
+            </tr>
+            <tr>
+              <td class="field-name">location</td>
+              <td><span class="type-tag">object</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Store location address and geolocational coordinates.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- Subscription Active Status Enums Section -->
+    <section class="doc-section" id="model-active-status">
+      <h2 class="section-title">
+        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+      Subscription Active Status Enums (<code>active_status.method</code>)
+      </h2>
+
+      <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;">
+        To make subscription evaluation clean and predictable for the frontend client, <code>active_status.method</code> relies on a fixed enum: <strong><code>DATE</code></strong> or <strong><code>PURCHASE</code></strong>. The client inspects <code>method</code> to decide whether to render the expiration date or minimum purchase quota.
+      </p>
+
+      <div class="enum-grid">
+        <!-- Enum DATE -->
+        <div class="tabs-container">
+          <div class="tabs-header">
+            <span class="badge badge-success">Method Enum: "DATE"</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Date-based Subscription</span>
+          </div>
+          <pre><code id="code-date-enum">{
+  <span class="syn-key">"method"</span>: <span class="syn-string">"DATE"</span>,
+  <span class="syn-key">"date"</span>: <span class="syn-string">"2028-08-12"</span>,
+  <span class="syn-key">"purchase"</span>: <span class="syn-null">null</span>,
+  <span class="syn-key">"wallet_coin_balance"</span>: <span class="syn-number">126</span>,
+  <span class="syn-key">"commission_rate"</span>: <span class="syn-number">0.11</span>,
+  <span class="syn-key">"exchange_currency"</span>: <span class="syn-string">"INR"</span>
+}</code></pre>
+          <div style="padding: 1rem 1.25rem; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--border);">
+            When <code>method == "DATE"</code>, <code>date</code> contains the expiration date string (YYYY-MM-DD) and <code>purchase</code> is set to <code>null</code>.
+          </div>
+        </div>
+
+        <!-- Enum PURCHASE -->
+        <div class="tabs-container">
+          <div class="tabs-header">
+            <span class="badge badge-info">Method Enum: "PURCHASE"</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Purchase-volume Subscription</span>
+          </div>
+          <pre><code id="code-purchase-enum">{
+  <span class="syn-key">"method"</span>: <span class="syn-string">"PURCHASE"</span>,
+  <span class="syn-key">"date"</span>: <span class="syn-null">null</span>,
+  <span class="syn-key">"purchase"</span>: <span class="syn-number">120458</span>,
+  <span class="syn-key">"wallet_coin_balance"</span>: <span class="syn-number">126</span>,
+  <span class="syn-key">"commission_rate"</span>: <span class="syn-number">0.11</span>,
+  <span class="syn-key">"exchange_currency"</span>: <span class="syn-string">"INR"</span>
+}</code></pre>
+          <div style="padding: 1rem 1.25rem; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid var(--border);">
+            When <code>method == "PURCHASE"</code>, <code>purchase</code> contains the required purchase quota number and <code>date</code> is set to <code>null</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Models (Location & Error) -->
+    <section class="doc-section" id="model-location">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Location Model (<code>stores[].location</code>)</h3>
+          <span class="badge badge-info">Store Address & Geolocation</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Data Type</th>
+              <th>Nullable</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="field-name">address_line_1</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Primary address line (e.g. street name, building number).</td>
+            </tr>
+            <tr>
+              <td class="field-name">address_line_2</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Secondary address line or landmark.</td>
+            </tr>
+            <tr>
+              <td class="field-name">city</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>City name.</td>
+            </tr>
+            <tr>
+              <td class="field-name">state</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>State or province name.</td>
+            </tr>
+            <tr>
+              <td class="field-name">country</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Country name.</td>
+            </tr>
+            <tr>
+              <td class="field-name">latitude</td>
+              <td><span class="type-tag">float</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>GPS Latitude decimal coordinate.</td>
+            </tr>
+            <tr>
+              <td class="field-name">longitude</td>
+              <td><span class="type-tag">float</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>GPS Longitude decimal coordinate.</td>
+            </tr>
+            <tr>
+              <td class="field-name">map_url</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-no">No</span></td>
+              <td>Google Maps URL link for store navigation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-container" id="model-error">
+        <div class="table-header">
+          <h3>Error Model (<code>response.error</code>)</h3>
+          <span class="badge badge-danger">Error Contract</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Field Name</th>
+              <th>Data Type</th>
+              <th>Nullable</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="field-name">code</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>Standard error classification code (e.g. <code>"INVALID_CREDENTIALS"</code>). <code>null</code> on success.</td>
+            </tr>
+            <tr>
+              <td class="field-name">message</td>
+              <td><span class="type-tag">string</span></td>
+              <td><span class="nullable-tag nullable-yes">Yes</span></td>
+              <td>Detailed human-readable error explanation message. <code>null</code> on success.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function switchTab(tabId, btnElement) {
+      // Hide all contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      // Deactivate all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Activate target
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    function copyActiveCode() {
+      const activeContent = document.querySelector('.tab-content.active code');
+      if (activeContent) {
+        const textToCopy = activeContent.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const copyBtn = document.querySelector('.copy-btn');
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = `
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            Copied!
+          `;
+          setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+          }, 2000);
+        });
+      }
+    }
+
+    // ScrollSpy active link updating
+    window.addEventListener('scroll', () => {
+      let current = '';
+      const sections = document.querySelectorAll('header, section, .table-container');
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      if (current) {
+        document.querySelectorAll('.nav-links li a').forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === `#${current}`) {
+            a.classList.add('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

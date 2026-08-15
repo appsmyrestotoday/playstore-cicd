@@ -1,0 +1,11 @@
+{
+    "success": false,
+    "message": "Login failed",
+    "ui_message": "Invalid mobile number or password",
+    "login_context_and_data": null,
+    "redirect_url": "/error-page",
+    "error": {
+        "code": "INVALID_CREDENTIALS",
+        "message": "Invalid mobile number or password"
+    }
+}

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - iXPOS by myResto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#3c475a",
+                      "surface": "#f8f9ff",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#00201d",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#006a61",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "surface-container-high": "#dce9ff",
+                      "primary-container": "#1e293b",
+                      "secondary-container": "#86f2e4",
+                      "secondary-fixed-dim": "#6bd8cb",
+                      "on-primary-container": "#8590a6",
+                      "surface-container": "#e5eeff",
+                      "surface-tint": "#545f73",
+                      "on-primary-fixed": "#111c2d",
+                      "tertiary-fixed": "#d8e2ff",
+                      "tertiary-container": "#00275b",
+                      "secondary-fixed": "#89f5e7",
+                      "surface-bright": "#f8f9ff",
+                      "outline-variant": "#c5c6cd",
+                      "on-tertiary-fixed": "#001a42",
+                      "inverse-primary": "#bcc7de",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#cbdbf5",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#213145",
+                      "on-background": "#0b1c30",
+                      "surface-variant": "#d3e4fe",
+                      "inverse-on-surface": "#eaf1ff",
+                      "primary-fixed-dim": "#bcc7de",
+                      "primary": "#091426",
+                      "surface-container-low": "#eff4ff",
+                      "on-surface-variant": "#45474c",
+                      "background": "#f8f9ff",
+                      "primary-fixed": "#d8e3fb",
+                      "on-surface": "#0b1c30",
+                      "tertiary": "#001334",
+                      "on-tertiary-container": "#4c8dff",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "outline": "#75777d",
+                      "on-secondary-container": "#006f66",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#005049",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "space-md": "16px",
+                      "gutter": "24px",
+                      "space-xl": "32px",
+                      "space-xs": "4px",
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "space-sm": "8px",
+                      "space-lg": "24px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-md-mobile": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md-mobile": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .card-shadow {
+            box-shadow: 0px 1px 3px rgba(15, 23, 42, 0.08), 0px 4px 6px rgba(15, 23, 42, 0.05);
+        }
+        .border_subtle {
+            border: 1px solid theme('colors.outline-variant');
+        }
+        
+        /* Material Symbols Fill override */
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex font-body-md text-body-md">
+<!-- SideNavBar (from JSON) -->
+<nav class="hidden md:flex flex-col bg-primary-container dark:bg-primary fixed left-0 top-0 h-full w-sidebar-width z-40 py-space-lg font-body-md text-body-md border-r border-transparent">
+<!-- Header Info -->
+<div class="px-space-lg mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden shrink-0">
+<img alt="Ahinas Profile Picture" class="w-full h-full object-cover" data-alt="A professional headshot of a restaurant manager with a neat, approachable appearance, set against a clean, modern corporate office background. The lighting is soft and bright, emphasizing trust and competence. High key lighting, 85mm portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlSo_1AUIZx8XGkUGPpst34E0Wqgof5O8V8shP5o1P0zb7H9O-1XtpizRSfZtPs9gl2yRJzfkFNIAaofgvs1TOh-BojShT6Z4VTMs8QhQPfCxxUjrPwbI_YNN-j0KMYXg4oNDOcWs3qd4CIhWGf3Yu3OXQ-3J1B06Hf2o0aYT5SmPhJaILQ36NMTVrYXLcb-vHH-UqT7L7ERFOKd0C46kJhLL5eV2fGPIoRAMHhUFl4S8-R1G849Eg"/>
+</div>
+<div class="overflow-hidden">
+<h2 class="font-headline-md text-headline-md font-bold text-on-primary dark:text-inverse-on-surface truncate">Ahinas</h2>
+<p class="font-label-md text-label-md text-on-primary-container dark:text-on-primary-container/80 tracking-wider">ADMIN</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex-1 flex flex-col gap-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 bg-white/10 text-white border-l-4 border-secondary px-4 py-3 hover:bg-white/5 hover:text-white transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Inactive Tab: Stores -->
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-primary-container/80 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="storefront">storefront</span>
+<span>Stores</span>
+</a>
+<!-- Inactive Tab: Account -->
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-primary-container/80 px-4 py-3 hover:bg-white/5 hover:text-white transition-colors scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+<span>Account</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-h-screen md:ml-sidebar-width w-full max-w-container-max mx-auto">
+<!-- TopNavBar (from JSON) -->
+<header class="sticky top-0 w-full z-30 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex justify-between items-center h-16 px-space-lg">
+<!-- Brand / Left Side -->
+<div class="flex items-center gap-4">
+<!-- Mobile Hamburger (visible md:hidden) -->
+<button class="md:hidden text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed hidden md:block">
+                    iXPOS by myResto
+                </div>
+</div>
+<!-- Global Search (Center - logical implementation of "search_bar": "on_left" within a top nav layout usually means left-aligned relative to center, but standard SaaS patterns put it in center/left) -->
+<div class="flex-1 max-w-md mx-4 hidden md:flex items-center">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded bg-surface-container-lowest border_subtle text-body-md font-body-md text-on-surface focus:outline-none focus:border-tertiary-container focus:ring-2 focus:ring-tertiary-container/20 transition-all shadow-sm placeholder:text-on-surface-variant" placeholder="Search stores, IDs..." type="text"/>
+</div>
+</div>
+<!-- Trailing Icons & Profile -->
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors opacity-80 active:opacity-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors opacity-80 active:opacity-100 hidden sm:flex">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden shrink-0 ml-2 border border-outline-variant cursor-pointer">
+<img alt="Ahinas Avatar" class="w-full h-full object-cover" data-alt="A small circular avatar portrait of the administrator, clear and brightly lit, matching the sidebar profile image style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwG61AXL4qXU4vXx7QA5hE43-9KWvQU_m-TuYnBtewcFjYvYwBvmM_Oh6rfqjg_Tbs4T29klc4MZnNWPRQ1BDDa88fCWRdTLqb6NZ_90Rh6EZB3-7onYx0BfMT6qYzG15eTDkOuQPYG646Zxzqo95qHy6KMTJJ9mJdcmFPqcfrGhNq8kr_TE3hk1bEuBQiQicn_n-qEZxx_8kWAObJRSdYdoLcapCuESrUtKjPdIfmyBLC_As36dcW"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 p-space-md md:p-space-lg flex flex-col gap-gutter">
+<!-- Welcome Banner -->
+<div class="flex flex-col gap-2">
+<h1 class="font-display-lg text-display-lg text-primary">HI Ahinas,</h1>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant">Welcome to iXPOS by myResto Today</p>
+</div>
+<!-- User Profile & Account Summary Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Account Info Card (Spans 2 cols on lg) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl card-shadow border_subtle overflow-hidden flex flex-col">
+<div class="p-space-lg flex flex-col sm:flex-row gap-6 items-start sm:items-center border-b border-outline-variant/50">
+<div class="w-24 h-24 rounded-full bg-surface-container overflow-hidden shrink-0 border-2 border-surface-container-lowest shadow-sm relative">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A medium sized profile picture of Ahinas, smiling confidently in a modern tech-forward office environment. The image is bright and professional, emphasizing a modern SaaS aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY8rFZWdxpyyK0Hq1diMzfMwlXE9i3C5_9LbI5tEiWoXmvJE59kg2nF8SmywnqMX6AHQbeq-m0Cb1bztmHCThA7G9FTf70iqTKht7rQ3tHLuGUrfdsdEEy3NmogQfj3P5P3a6ZdXMbp8TFg4QAOkBivwRvvM6byVu19QLh76OAS88qw43hhJuO8FjrhOgdQd0mgqhoNKe74BTbid8BH2JeE6BufVRD0K2DfvJEBegBI0RHowyTIoNc"/>
+<!-- Verified Badge Overlay -->
+<div class="absolute bottom-0 right-0 w-6 h-6 bg-secondary text-white rounded-full flex items-center justify-center border-2 border-white" title="Verified User">
+<span class="material-symbols-outlined text-[14px]" data-weight="fill">verified</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Ahinas</h2>
+<span class="bg-secondary/10 text-secondary font-label-md text-label-md px-2 py-1 rounded-full flex items-center gap-1 border border-secondary/20">
+<span class="material-symbols-outlined text-[14px]" data-weight="fill">verified</span>
+                                    Verified Account
+                                </span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-4">Brand Name</p>
+<div class="flex flex-wrap gap-x-6 gap-y-2">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+<span>myrestotoday@gmail.com</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">phone_iphone</span>
+<span>917867867860</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[18px]">shield_person</span>
+<span>Role: <strong class="text-primary font-semibold">ADMIN</strong></span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-md flex justify-between items-center mt-auto">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Account Status</span>
+<span class="text-secondary font-semibold font-body-md text-body-md flex items-center gap-1">
+                            Active
+                            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+</span>
+</div>
+</div>
+<!-- Stores Summary Card -->
+<div class="bg-primary text-on-primary rounded-xl card-shadow overflow-hidden flex flex-col relative justify-center items-center p-space-lg text-center">
+<!-- Subtle background pattern -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+<span class="material-symbols-outlined text-[48px] text-primary-fixed mb-4 relative z-10" data-weight="fill">store</span>
+<h3 class="font-display-lg text-display-lg font-bold text-white relative z-10 mb-2">3</h3>
+<p class="font-body-lg text-body-lg text-primary-fixed-dim relative z-10">Stores under this brand</p>
+</div>
+</div>
+<!-- Store Management Section -->
+<div class="flex flex-col gap-4 mt-space-md">
+<div class="flex justify-between items-end border-b border-outline-variant pb-2">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Store Locations</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Manage and monitor all properties under your brand.</p>
+</div>
+<button class="hidden sm:flex items-center gap-2 text-tertiary-container hover:text-tertiary font-label-md text-label-md uppercase tracking-wider transition-colors">
+                        View All List
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Bento Grid for Stores -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Store Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl card-shadow border_subtle overflow-hidden flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="p-space-lg flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-tertiary-container transition-colors">Store Name 1</h3>
+<span class="inline-block mt-1 font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30 uppercase">Restaurant</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-tertiary-container transition-colors">restaurant</span>
+</div>
+<div class="space-y-3 font-body-md text-body-md">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Track ID</span>
+<span class="font-semibold text-on-surface">MKI0596</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="bg-tertiary-container/10 text-tertiary-container px-2 py-0.5 rounded text-[12px] font-semibold flex items-center gap-1">
+                                        Valid until 2028-08-12
+                                    </span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Wallet</span>
+<span class="font-semibold text-on-surface">126 INR</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Commission</span>
+<span class="font-semibold text-on-surface">11%</span>
+</div>
+<div class="flex gap-2 text-on-surface-variant mt-2 pt-2 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-[18px] shrink-0">location_on</span>
+<span class="text-[13px]">Erattupetta, Kerala, India</span>
+</div>
+</div>
+</div>
+<a class="bg-surface-container p-3 flex justify-center items-center gap-2 text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors border-t border_subtle" href="https://maps.google.com/?q=Erattupetta,Kerala,India" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">map</span>
+                            VIEW MAP
+                        </a>
+</div>
+<!-- Store Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl card-shadow border_subtle overflow-hidden flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="p-space-lg flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-tertiary-container transition-colors">Store Name 2</h3>
+<span class="inline-block mt-1 font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30 uppercase">Cafe</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-tertiary-container transition-colors">local_cafe</span>
+</div>
+<div class="space-y-3 font-body-md text-body-md">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Track ID</span>
+<span class="font-semibold text-on-surface">MKI0597</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-[12px] font-semibold flex items-center gap-1">
+                                        Purchase based (120,458)
+                                    </span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Wallet</span>
+<span class="font-semibold text-on-surface">126 INR</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Commission</span>
+<span class="font-semibold text-on-surface">11%</span>
+</div>
+<div class="flex gap-2 text-on-surface-variant mt-2 pt-2 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-[18px] shrink-0">location_on</span>
+<span class="text-[13px]">Erattupetta, Kerala, India</span>
+</div>
+</div>
+</div>
+<a class="bg-surface-container p-3 flex justify-center items-center gap-2 text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors border-t border_subtle" href="https://maps.google.com/?q=Erattupetta,Kerala,India" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">map</span>
+                            VIEW MAP
+                        </a>
+</div>
+<!-- Store Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl card-shadow border_subtle overflow-hidden flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="p-space-lg flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-tertiary-container transition-colors">Store Name 3</h3>
+<span class="inline-block mt-1 font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30 uppercase">Restaurant</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-tertiary-container transition-colors">restaurant</span>
+</div>
+<div class="space-y-3 font-body-md text-body-md">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Track ID</span>
+<span class="font-semibold text-on-surface">MKI0100</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="bg-tertiary-container/10 text-tertiary-container px-2 py-0.5 rounded text-[12px] font-semibold flex items-center gap-1">
+                                        Valid until 2028-08-12
+                                    </span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Wallet</span>
+<span class="font-semibold text-on-surface">126 INR</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Commission</span>
+<span class="font-semibold text-on-surface">11%</span>
+</div>
+<div class="flex gap-2 text-on-surface-variant mt-2 pt-2 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-[18px] shrink-0">location_on</span>
+<span class="text-[13px]">Erattupetta, Kerala, India</span>
+</div>
+</div>
+</div>
+<a class="bg-surface-container p-3 flex justify-center items-center gap-2 text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors border-t border_subtle" href="https://maps.google.com/?q=Erattupetta,Kerala,India" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">map</span>
+                            VIEW MAP
+                        </a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
