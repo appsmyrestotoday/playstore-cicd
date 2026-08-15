@@ -100,18 +100,16 @@
     border:1px solid var(--line);
     border-radius:var(--radius);
     padding:28px 22px 22px;
-    overflow-x:auto;
   }
-  .overview-diagram svg{display:block;min-width:920px;width:100%;}
+  .overview-diagram svg{display:block;width:100%;height:auto;}
 
   /* ---------- LAYOUT ---------- */
   .wrap{
     display:grid;
     grid-template-columns:260px 1fr;
     gap:0;
-    max-width:1440px;
     margin:0 auto;
-    padding:0 6vw;
+    padding:0 4vw;
   }
   @media (max-width:900px){
     .wrap{grid-template-columns:1fr; padding:0 5vw;}
@@ -220,9 +218,8 @@
     border-radius:var(--radius);
     padding:28px 22px 22px;
     margin-bottom:22px;
-    overflow-x:auto;
   }
-  .diagram-box svg{display:block; min-width:920px; width:100%;}
+  .diagram-box svg{display:block; width:100%; height:auto;}
   .diagram-caption{
     font-family:var(--mono);
     font-size:11px;
